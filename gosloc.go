@@ -36,7 +36,7 @@ func parseArgs() (path string, vendor bool) {
 			continue
 		}
 		// Add a / so it works with symlinks
-		path = filepath.Clean(val)+"/"
+		path = filepath.Clean(val) + "/"
 	}
 
 	if path == "" {
@@ -116,7 +116,7 @@ func main() {
 			}
 		}
 
-		if scanner.Err() != nil && scanner.Err() == bufio.ErrTooLong{
+		if scanner.Err() != nil && scanner.Err() == bufio.ErrTooLong {
 			fmt.Printf("- Skipping %s because of unusually long lines\n", path)
 			return nil
 		}
@@ -135,14 +135,14 @@ func main() {
 	}
 
 	if files == 0 {
-		fmt.Printf("No go source files found in %s\n", path)
+		fmt.Printf("No Go source files found in %s\n", path)
 	} else {
-		total := float64(code+comments+blanks)
-		fmt.Printf("Scanned %d go files in %s:\n", files, path)
-		fmt.Printf("  Source lines:    %d (%.1f%%)\n", code, float64(code)/total*100)
-		fmt.Printf("  Comment lines:   %d (%.1f%%)\n", comments, float64(comments)/total*100)
-		fmt.Printf("  Blank lines:     %d (%.1f%%)\n", blanks, float64(blanks)/total*100)
-		fmt.Printf("  Test lines:      %d (%.2f per line of code)\n", tests, float64(tests)/float64(code))
-		fmt.Printf("  Total file size: %.2f Mb\n", float64(byteSize)/(1024.0*1024.0))
+		total := code + comments + blanks
+		totalF := float64(total)
+		fmt.Printf("Source\t%8d\t%4.1f%%\n", code, float64(code)/totalF*100)
+		fmt.Printf("Comment\t%8d\t%4.1f%%\n", comments, float64(comments)/totalF*100)
+		fmt.Printf("Blank\t%8d\t%4.1f%%\t\n", blanks, float64(blanks)/totalF*100)
+		fmt.Printf("Test\t%8d\t%4.1f per line of code\n", tests, float64(tests)/float64(code))
+		fmt.Printf("Total\t%8d\t%d files\t%.1f KiB\n", total, files, float64(byteSize)/1024.0)
 	}
 }
